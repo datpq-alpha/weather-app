@@ -1,15 +1,18 @@
 import requests
+import streamlit as st
 
-# --- API KEY (QUAN TRỌNG)---
-API_KEY = "1386194825985e3fa8d19f01c3819826"
 BASE_URL = "http://api.openweathermap.org/data/2.5/weather"
-
 
 def get_weather(city_name):
     try:
-        url = f"{BASE_URL}?q={city_name}&appid={API_KEY}&units=metric&lang=vi"
-        response = requests.get(url)
-
+        api_key = st.secrets["API_KEY"]
+        params = {
+            "q": city_name,
+            "appid": api_key,
+            "units": "metric",
+            "lang": "vi"
+        }
+        response = requests.get(BASE_URL, params=params)
         if response.status_code == 200:
             data = response.json()
             return {
@@ -21,7 +24,7 @@ def get_weather(city_name):
             }
         else:
             return None
-    except:
+    except Exception:
         return None
     # return {
     #     "city": f"{city_name} (Demo)",
